@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/asymmetrictoggle.tsx","./src/components/dimensionentry.tsx","./src/components/dropshipcta.tsx","./src/components/matpreview.tsx","./src/components/opticalcenteringhint.tsx","./src/lib/supabase.ts","./packages/core/src/math.test.ts","./packages/core/src/math.ts"],"version":"5.9.3"}
