@@ -1,6 +1,6 @@
 import type { Border } from '../../packages/core/src/math';
 
-export default function MatPreview({ artW, artH, border, result }: {
+export default function MatPreview({ border, result }: {
   artW: number; artH: number; border: Border;
   result: { outerW: number; outerH: number; openingW: number; openingH: number };
 }) {
@@ -9,8 +9,8 @@ export default function MatPreview({ artW, artH, border, result }: {
   const h = result.outerH * sx;
   const bt = border.kind === 'symmetric' ? border.border : border.top;
   const bl = border.kind === 'symmetric' ? border.border : border.left;
-  const innerW = artW * sx;
-  const innerH = artH * sx;
+  const innerW = result.openingW * sx;
+  const innerH = result.openingH * sx;
 
   return (
     <div className="flex justify-center">
