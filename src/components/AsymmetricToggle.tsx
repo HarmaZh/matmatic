@@ -5,10 +5,10 @@ export default function AsymmetricToggle({ value, onChange }: { value: boolean; 
       <button
         type="button"
         onClick={() => onChange(!value)}
-        className="relative inline-flex h-9 w-44 items-center rounded-full bg-ink/5 p-1 text-sm transition-transform active:scale-[0.97]"
+        className="relative inline-flex h-12 w-48 items-center rounded-full bg-ink/5 p-1 text-sm transition-transform active:scale-[0.97]"
         aria-pressed={value}
       >
-        <span className={`absolute h-7 w-[88px] rounded-full bg-paper shadow-sm transition-transform duration-200 ${value ? 'translate-x-[80px]' : 'translate-x-0'}`} />
+        <span className={`absolute h-10 w-[92px] rounded-full bg-paper shadow-sm transition-transform duration-200 ${value ? 'translate-x-[92px]' : 'translate-x-0'}`} />
         <span className={`relative flex-1 text-center ${!value ? 'text-ink font-medium' : 'text-graphite'}`}>Symmetric</span>
         <span className={`relative flex-1 text-center ${value ? 'text-ink font-medium' : 'text-graphite'}`}>Asymmetric</span>
       </button>

@@ -13,9 +13,9 @@ export default function OpticalCenteringHint({ border, result, onApply }: {
 
   return (
     <div className="mt-4 rounded-md border border-ink/10 bg-mat-cream/60 px-4 py-3 text-sm">
-      <p className="text-ink mb-2"><span aria-hidden>⚖</span> Optical center: bottom border ~{Math.round((mult - 1) * 100)}% taller balances visual weight.</p>
+      <p className="text-ink mb-2">Optical center — a bottom border ~{Math.round((mult - 1) * 100)}% taller balances visual weight.</p>
       <div className="flex gap-2">
-        <button onClick={apply} className="px-3 py-1.5 rounded-md bg-pigment text-paper text-sm transition-transform active:scale-[0.97]">Apply</button>
+        <button onClick={apply} className="inline-flex items-center justify-center min-h-[48px] px-5 rounded-md bg-pigment text-paper text-sm transition-transform active:scale-[0.97]">Apply</button>
       </div>
     </div>
   );

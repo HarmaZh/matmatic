@@ -9,3 +9,5 @@ screenshots/
 ios/
 android/
 .wrangler/
+supabase/.temp/
+tsconfig.tsbuildinfo
