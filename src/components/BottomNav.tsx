@@ -16,7 +16,10 @@ const TABS: Tab[] = [
 
 export default function BottomNav() {
   return (
-    <nav className="bottom-nav fixed bottom-0 left-0 right-0 bg-paper border-t border-ink/[0.08] pb-[env(safe-area-inset-bottom)] flex">
+    <nav
+      className="bottom-nav fixed bottom-0 left-0 right-0 border-t border-ink/[0.08] pb-[env(safe-area-inset-bottom)] flex"
+      style={{ background: 'rgb(var(--color-paper-rgb))' }}
+    >
       {TABS.map(({ to, label, Icon }) => (
         <NavLink
           key={to}

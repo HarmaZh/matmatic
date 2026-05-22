@@ -15,12 +15,17 @@ export default function MatPreview({ border, result }: {
   return (
     <div className="flex justify-center">
       <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h} className="rounded-sm" aria-label="Mat preview">
-        <rect x="0" y="0" width={w} height={h} className="fill-mat-cream stroke-ink" strokeWidth="0.5" />
+        <rect
+          x="0" y="0" width={w} height={h}
+          style={{ fill: 'rgb(var(--color-mat-cream-rgb))', stroke: 'rgb(var(--color-ink-rgb))' }}
+          strokeWidth="0.5"
+        />
         <rect
           x={bl * sx} y={bt * sx}
           width={innerW} height={innerH}
           fill="#9C3E2C" fillOpacity="0.18"
-          className="stroke-ink" strokeWidth="0.5"
+          style={{ stroke: 'rgb(var(--color-ink-rgb))' }}
+          strokeWidth="0.5"
         />
       </svg>
     </div>

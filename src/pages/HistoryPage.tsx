@@ -27,12 +27,17 @@ function MiniMatPreview({ calc }: { calc: RecentCalc }) {
       aria-hidden="true"
       className="rounded-[3px] shrink-0"
     >
-      <rect x="0" y="0" width={svgW} height={svgH} className="fill-paper stroke-ink" strokeWidth="0.5" />
+      <rect
+        x="0" y="0" width={svgW} height={svgH}
+        style={{ fill: 'rgb(var(--color-paper-rgb))', stroke: 'rgb(var(--color-ink-rgb))' }}
+        strokeWidth="0.5"
+      />
       <rect
         x={leftOffset} y={topOffset}
         width={innerW} height={innerH}
         fill="#9C3E2C" fillOpacity="0.18"
-        className="stroke-ink" strokeWidth="0.5"
+        style={{ stroke: 'rgb(var(--color-ink-rgb))' }}
+        strokeWidth="0.5"
       />
     </svg>
   );
