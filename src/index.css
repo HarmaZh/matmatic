@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 :root { color-scheme: light; }
-html, body { background: #F6F2E9; }
+html, body { background: rgb(var(--color-paper-rgb)); color: rgb(var(--color-ink-rgb)); }
 body {
   font-family: 'Fraunces', Georgia, serif;
   font-feature-settings: "ss01", "ss02";
-  color: #1F1B17;
   min-height: 100dvh;
 }
 .tabular-nums { font-variant-numeric: tabular-nums; }
@@ -17,4 +16,21 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+:root {
+  --color-paper-rgb: 246, 242, 233;
+  --color-mat-cream-rgb: 237, 229, 211;
+  --color-ink-rgb: 31, 27, 23;
+  --app-nav-h: 56px;
+}
+
+[data-theme="paper-dark"] {
+  --color-paper-rgb: 28, 26, 23;
+  --color-mat-cream-rgb: 42, 38, 32;
+  --color-ink-rgb: 237, 230, 214;
+}
+
+[data-keyboard="open"] .bottom-nav {
+  display: none;
 }

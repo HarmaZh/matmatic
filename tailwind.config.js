@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#F6F2E9',
-        'mat-cream': '#EDE5D3',
-        ink: '#1F1B17',
+        paper: 'rgb(var(--color-paper-rgb) / <alpha-value>)',
+        'mat-cream': 'rgb(var(--color-mat-cream-rgb) / <alpha-value>)',
+        ink: 'rgb(var(--color-ink-rgb) / <alpha-value>)',
         graphite: '#5C544A',
         pigment: '#9C3E2C',
         seal: '#1A4E3A',

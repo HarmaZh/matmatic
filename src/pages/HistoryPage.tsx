@@ -27,12 +27,12 @@ function MiniMatPreview({ calc }: { calc: RecentCalc }) {
       aria-hidden="true"
       className="rounded-[3px] shrink-0"
     >
-      <rect x="0" y="0" width={svgW} height={svgH} fill="#F6F2E9" stroke="#1F1B17" strokeWidth="0.5" />
+      <rect x="0" y="0" width={svgW} height={svgH} className="fill-paper stroke-ink" strokeWidth="0.5" />
       <rect
         x={leftOffset} y={topOffset}
         width={innerW} height={innerH}
         fill="#9C3E2C" fillOpacity="0.18"
-        stroke="#1F1B17" strokeWidth="0.5"
+        className="stroke-ink" strokeWidth="0.5"
       />
     </svg>
   );
@@ -59,7 +59,7 @@ function formatDims(outerW: number, outerH: number): string {
   return `${toFractionString(outerW)} × ${toFractionString(outerH)}`;
 }
 
-export default function ProfilePage() {
+export default function HistoryPage() {
   const [recent, setRecent] = useState<RecentCalc[]>([]);
   const [mounted, setMounted] = useState(false);
 
@@ -71,20 +71,7 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <main className="min-h-[100dvh] bg-paper text-ink px-5 pt-10 pb-8 max-w-md mx-auto">
-      {/* Header */}
-      <header className="flex items-center justify-between mb-8">
-        <Link to="/" className="text-sm text-graphite hover:text-ink transition-colors">
-          ← Matmatic
-        </Link>
-        <Link
-          to="/calc"
-          className="text-sm font-medium text-pigment hover:opacity-80 transition-opacity"
-        >
-          New mat
-        </Link>
-      </header>
-
+    <main className="bg-paper text-ink px-5 pt-10 pb-8 max-w-md mx-auto">
       {/* Eyebrow */}
       <p
         className="font-serif font-medium uppercase text-pigment mb-3"

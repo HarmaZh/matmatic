@@ -23,7 +23,7 @@ export function loadRecent(): RecentCalc[] {
   } catch { return []; }
 }
 
-export function saveRecent(calc: Omit<RecentCalc, 'id' | 'ts'>): void {
+export function saveRecent(calc: Omit<RecentCalc, 'id' | 'ts'>): string | null {
   try {
     const existing = loadRecent();
     const entry: RecentCalc = { ...calc, id: crypto.randomUUID(), ts: Date.now() };
@@ -32,11 +32,12 @@ export function saveRecent(calc: Omit<RecentCalc, 'id' | 'ts'>): void {
     if (last && Date.now() - last.ts < 60_000 &&
         last.artW === calc.artW && last.artH === calc.artH &&
         last.kind === calc.kind && last.overlap === calc.overlap) {
-      return;
+      return null;
     }
     const next = [entry, ...existing].slice(0, MAX);
     localStorage.setItem(KEY, JSON.stringify(next));
-  } catch {}
+    return entry.id;
+  } catch { return null; }
 }
 
 export function formatRelativeTime(ts: number): string {

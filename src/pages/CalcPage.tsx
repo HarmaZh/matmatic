@@ -1,26 +1,30 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { calculate, toFractionString, type Border, type OverlapPreset, MatMathError } from '../../packages/core/src/math';
 import DimensionEntry from '../components/DimensionEntry';
 import AsymmetricToggle from '../components/AsymmetricToggle';
 import MatPreview from '../components/MatPreview';
-import DropshipCTA from '../components/DropshipCTA';
+import CutListPanel from '../components/CutListPanel';
 import OpticalCenteringHint from '../components/OpticalCenteringHint';
 import { saveRecent } from '../lib/recent';
+import { loadProfile } from '../lib/profile';
 
 export default function CalcPage() {
   const [searchParams] = useSearchParams();
 
-  // Hydrate from URL params on mount
+  // One-time read of profile defaults at mount
+  const profile = useMemo(() => loadProfile(), []);
+
+  // Hydrate from URL params on mount; fall back to profile defaults
   const initArtW = Number(searchParams.get('w')) || 8;
   const initArtH = Number(searchParams.get('h')) || 10;
-  const initOverlap = (Number(searchParams.get('overlap')) || 0.25) as OverlapPreset;
+  const initOverlap = (Number(searchParams.get('overlap')) || profile.defaultOverlap) as OverlapPreset;
   const initAsymmetric = !!(searchParams.get('t') || searchParams.get('r') || searchParams.get('b') || searchParams.get('l'));
-  const initSymBorder = Number(searchParams.get('border')) || 2;
-  const initT = Number(searchParams.get('t')) || 2;
-  const initR = Number(searchParams.get('r')) || 2;
-  const initB = Number(searchParams.get('b')) || 2;
-  const initL = Number(searchParams.get('l')) || 2;
+  const initSymBorder = Number(searchParams.get('border')) || profile.defaultBorder;
+  const initT = Number(searchParams.get('t')) || profile.defaultBorder;
+  const initR = Number(searchParams.get('r')) || profile.defaultBorder;
+  const initB = Number(searchParams.get('b')) || profile.defaultBorder;
+  const initL = Number(searchParams.get('l')) || profile.defaultBorder;
 
   const [artW, setArtW] = useState(initArtW);
   const [artH, setArtH] = useState(initArtH);
@@ -31,6 +35,9 @@ export default function CalcPage() {
   const [borderR, setBorderR] = useState(initR);
   const [borderB, setBorderB] = useState(initB);
   const [borderL, setBorderL] = useState(initL);
+
+  // P0 fix #4: track the id assigned by saveRecent for CutListPanel link
+  const [calcId, setCalcId] = useState<string | null>(null);
 
   const border: Border = asymmetric
     ? { kind: 'asymmetric', top: borderT, right: borderR, bottom: borderB, left: borderL }
@@ -47,7 +54,7 @@ export default function CalcPage() {
     if ('error' in result) return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      saveRecent({
+      const id = saveRecent({
         artW,
         artH,
         kind: asymmetric ? 'asymmetric' : 'symmetric',
@@ -58,24 +65,13 @@ export default function CalcPage() {
         outerW: result.outerW,
         outerH: result.outerH,
       });
+      if (id) setCalcId(id);
     }, 1500);
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
   }, [artW, artH, asymmetric, symBorder, borderT, borderR, borderB, borderL, overlap, result]);
 
   return (
-    <main className="min-h-[100dvh] bg-paper text-ink px-5 py-8 max-w-md mx-auto">
-      <header className="mb-6 flex items-center justify-between">
-        <Link to="/" className="text-sm text-graphite hover:text-ink transition-colors">
-          ← Matmatic
-        </Link>
-        <Link
-          to="/profile"
-          className="text-sm text-graphite hover:text-ink transition-colors"
-        >
-          Recent
-        </Link>
-      </header>
-
+    <main className="bg-paper text-ink px-5 py-8 max-w-md mx-auto">
       <p
         className="font-serif font-medium uppercase text-pigment mb-6"
         style={{ fontSize: '11px', letterSpacing: '0.18em' }}
@@ -121,7 +117,7 @@ export default function CalcPage() {
         )}
       </section>
 
-      {!('error' in result) && <DropshipCTA result={result} />}
+      {!('error' in result) && <CutListPanel result={result} calcId={calcId} />}
     </main>
   );
 }
