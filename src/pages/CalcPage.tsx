@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { calculate, toFractionString, type Border, type OverlapPreset, MatMathError } from '../../packages/core/src/math';
 import DimensionEntry from '../components/DimensionEntry';
 import AsymmetricToggle from '../components/AsymmetricToggle';
@@ -47,6 +47,15 @@ export default function CalcPage() {
     try { return calculate({ artW, artH, border, overlap }); }
     catch (e) { return e instanceof MatMathError ? { error: e.message } : { error: 'Math error' }; }
   }, [artW, artH, border, overlap]);
+
+  // Carry the current calc into the visualizer via the same URL-param contract.
+  const visualizerParams = useMemo(() => {
+    const p = new URLSearchParams();
+    p.set('w', String(artW)); p.set('h', String(artH)); p.set('overlap', String(overlap));
+    if (asymmetric) { p.set('t', String(borderT)); p.set('r', String(borderR)); p.set('b', String(borderB)); p.set('l', String(borderL)); }
+    else { p.set('border', String(symBorder)); }
+    return p.toString();
+  }, [artW, artH, overlap, asymmetric, borderT, borderR, borderB, borderL, symBorder]);
 
   // Debounce-save to recent: 1.5s after last input change
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -104,6 +113,14 @@ export default function CalcPage() {
             <p className="text-center mt-4 text-base tabular-nums">
               Outer: <strong>{toFractionString(result.outerW)} × {toFractionString(result.outerH)}"</strong>
             </p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                to={`/visualizer?${visualizerParams}`}
+                className="inline-flex items-center gap-1 min-h-[44px] px-4 font-serif text-sm text-pigment border-b border-pigment/40 active:opacity-80"
+              >
+                Preview on a wall →
+              </Link>
+            </div>
             <OpticalCenteringHint border={border} result={result} onApply={(b) => {
               setBorderT(b.top); setBorderR(b.right); setBorderB(b.bottom); setBorderL(b.left);
               setAsymmetric(true);

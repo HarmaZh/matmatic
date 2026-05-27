@@ -8,6 +8,7 @@ import AccountPage from './pages/AccountPage';
 import PresetsPage from './pages/PresetsPage';
 import ComparePage from './pages/ComparePage';
 import SeriesPage from './pages/SeriesPage';
+import VisualizerPage from './pages/VisualizerPage';
 import CutListPage from './pages/CutListPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { useLocalStorage } from './lib/useLocalStorage';
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/presets" element={<PresetsPage />} />
             <Route path="/compare" element={<ComparePage />} />
             <Route path="/series" element={<SeriesPage />} />
+            <Route path="/visualizer" element={<VisualizerPage />} />
             <Route path="/profile" element={<Navigate to="/history" replace />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

@@ -1,7 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { loadRecent, formatRelativeTime, type RecentCalc } from '../lib/recent';
+import { loadMockups, deleteMockup, type Mockup } from '../lib/mockups';
 import { toFractionString } from '../../packages/core/src/math';
+
+function buildMockupUrl(m: Mockup): string {
+  const p = new URLSearchParams();
+  p.set('w', String(m.artW)); p.set('h', String(m.artH)); p.set('overlap', String(m.overlap));
+  if (m.kind === 'asymmetric') {
+    p.set('t', String(m.top ?? 2)); p.set('r', String(m.right ?? 2));
+    p.set('b', String(m.bottom ?? 2)); p.set('l', String(m.left ?? 2));
+  } else {
+    p.set('border', String(m.border ?? 2));
+  }
+  p.set('frame', m.frame); p.set('wall', m.wall); p.set('mockup', m.id);
+  return `/visualizer?${p.toString()}`;
+}
 
 // Mini mat preview SVG at 64x48 viewport
 function MiniMatPreview({ calc }: { calc: RecentCalc }) {
@@ -66,14 +80,21 @@ function formatDims(outerW: number, outerH: number): string {
 
 export default function HistoryPage() {
   const [recent, setRecent] = useState<RecentCalc[]>([]);
+  const [mockups, setMockups] = useState<Mockup[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setRecent(loadRecent());
+    setMockups(loadMockups());
     // Small delay so the stagger animation fires visibly on mount
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
   }, []);
+
+  const onDeleteMockup = (id: string) => {
+    deleteMockup(id);
+    setMockups((prev) => prev.filter((m) => m.id !== id));
+  };
 
   return (
     <main className="bg-paper text-ink px-5 pt-10 pb-8 max-w-md mx-auto">
@@ -94,6 +115,41 @@ export default function HistoryPage() {
       <p className="text-graphite mb-8" style={{ fontSize: '14px' }}>
         Saved here on this phone. Cross-device sync is on the bench.
       </p>
+
+      {/* Saved gallery mockups */}
+      {mockups.length > 0 && (
+        <section className="mb-10">
+          <p
+            className="font-serif uppercase text-graphite mb-3"
+            style={{ fontSize: '11px', letterSpacing: '0.14em' }}
+          >
+            Your gallery
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {mockups.map((m) => (
+              <div key={m.id} className="relative group">
+                <Link to={buildMockupUrl(m)} aria-label="Open mockup">
+                  <img
+                    src={m.thumb}
+                    alt="Saved framed mockup"
+                    className="w-full h-auto rounded-[6px]"
+                    style={{ border: '1px solid rgba(31,27,23,0.10)' }}
+                  />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => onDeleteMockup(m.id)}
+                  aria-label="Delete mockup"
+                  className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center text-paper"
+                  style={{ background: 'rgba(31,27,23,0.55)', fontSize: '14px', lineHeight: 1 }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Card list or empty state */}
       {recent.length === 0 ? (

@@ -16,6 +16,7 @@ export type Profile = {
   defaultBorder: number;
   theme: 'paper-light' | 'paper-dark';
   presets: Preset[];
+  premium: boolean; // concept-demo Pro unlock (local only — no billing backend)
 };
 
 export type SaveResult =
@@ -30,6 +31,7 @@ export const DEFAULT_PROFILE: Profile = {
   defaultBorder: 2,
   theme: 'paper-light',
   presets: [],
+  premium: false,
 };
 
 export function loadProfile(): Profile {
